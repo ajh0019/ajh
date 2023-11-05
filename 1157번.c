@@ -1,31 +1,35 @@
 #include <stdio.h>
-#include <ctype.h>
+#include <string.h>
 
-int main() {
-    char word[1000001];
-    scanf("%s", word);
+int main(void)
+{
+    char str[25];
+    char plaintext_char;
+    char key_char;
+    char dkagh[25];
+    char key[25];
+    int len;
+    int key_len;
 
-    int letter_count[26] = {0};
+    printf("평문: ");
+    scanf("%s", str);
+    len = strlen(str);
 
-    for (int i = 0; word[i] != '\0'; i++) {
-        char c = toupper(word[i]);
-        if ('A' <= c && c <= 'Z') { 
-            letter_count[c - 'A']++;
-        }
+    printf("\n키: ");
+    scanf("%s", key);
+    key_len = strlen(key);
+
+    for (int i = 0; i < len; i++) {
+        plaintext_char = str[i];
+        key_char = key[i % key_len];
+
+        plaintext_char -= 'A';
+        key_char -= 'A';
+
+        dkagh[i] = ((key_char + plaintext_char) % 26) + 'A';
     }
 
-    int max_count = 0;
-    char most_frequent_letter = '?';
-    for (int i = 0; i < 26; i++) {
-        if (letter_count[i] > max_count) {
-            max_count = letter_count[i];
-            most_frequent_letter = 'A' + i;
-        } else if (letter_count[i] == max_count) {
-            most_frequent_letter = '?';
-        }
-    }
-
-    printf("%c\n", most_frequent_letter);
-
+    dkagh[len] = '\0';
+    printf("암호문: %s\n", dkagh);
     return 0;
 }
